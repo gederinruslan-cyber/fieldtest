@@ -1,0 +1,15 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "inputs": [
+        "$TURBO_ROOT$/engine/Cargo.*",
+        "$TURBO_ROOT$/engine/crates/**",
+        "$TURBO_ROOT$/scripts/engine.sh"
+      ],
+      "outputs": ["pkg/**"]
+    },
+    "typecheck": { "dependsOn": ["build"] },
+    "test": { "dependsOn": ["build"] }
+  }
+}

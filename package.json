@@ -10,7 +10,7 @@
     "format": "biome format --write . && bash scripts/engine.sh fmt",
     "format:check": "biome format .",
     "licenses:check": "bash scripts/engine.sh licenses && node scripts/licenses.mjs",
-    "verify": "pnpm check && pnpm format:check && pnpm licenses:check && bash scripts/engine.sh wasm && turbo run build",
+    "verify": "pnpm check && pnpm format:check && pnpm licenses:check && turbo run build",
     "verify:quick": "pnpm verify && docker compose up -d --wait && turbo run test:integration",
     "verify:full": "pnpm verify:quick && pnpm --filter @fieldtest/e2e test:e2e",
     "ship": "bash scripts/ship.sh"

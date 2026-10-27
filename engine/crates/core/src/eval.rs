@@ -37,6 +37,11 @@ impl HandRank {
     pub fn category(self) -> Category {
         CATEGORIES[(self.0 >> 20) as usize]
     }
+
+    /// The rank as a number that orders hands the same way.
+    pub fn value(self) -> u32 {
+        self.0
+    }
 }
 
 fn hand(category: Category, ranks: impl Iterator<Item = u8>) -> HandRank {
