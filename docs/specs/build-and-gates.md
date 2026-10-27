@@ -5,9 +5,10 @@
 ## Gates
 - `pnpm check` runs cargo fmt --check, clippy with warnings denied and cargo test over
   `engine/`, then Biome lint, typecheck and unit tests over every package; any failure exits
-  non-zero.
-- `pnpm verify` is check plus format check, license check, the engine's wasm32 build and the
-  production build of every app.
+  non-zero. The engine's wasm-pack build runs first wherever `packages/engine-wasm` needs it
+  (its typecheck and its tests, including the native/WASM parity test).
+- `pnpm verify` is check plus format check, license check and the production build of every
+  package, the WASM engine included.
 - `pnpm verify:quick` is verify plus Postgres and Valkey from `compose.yaml` reporting healthy,
   then the integration tests. It is the ship gate.
 - `pnpm verify:full` is verify:quick plus Playwright (desktop Chromium) against the production
