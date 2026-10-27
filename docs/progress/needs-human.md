@@ -32,9 +32,10 @@
   candidates.
 - **Decision:** _(human)_
 
-## NH-1 · GitHub repository and first commit · blocking · Status: open
+## NH-1 · GitHub repository and first commit · blocking · Status: resolved
 - **Raised:** 2026-10-28 during setup
 - **Needed:** create a private GitHub repo `fieldtest`, add it as `origin`, and push the
   initial commit on `main`. `pnpm ship` needs `origin`.
 - **Why:** public/outward-facing action
-- **Decision:** _(human)_
+- **Decision:** 2026-10-28: repo https://github.com/gederinruslan-cyber/fieldtest, kept **public** by the
+  human's choice; first commit 91abd6e pushed to `main`.
