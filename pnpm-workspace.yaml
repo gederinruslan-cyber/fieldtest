@@ -1,0 +1,12 @@
+packages:
+  - apps/*
+  - packages/*
+  - e2e
+
+# Optional native speedups; their pure-JS fallbacks are enough. No install scripts run.
+# sharp (Next's image optimizer) ships libvips under LGPL-3.0; we do not optimize images.
+ignoredOptionalDependencies:
+  - sharp
+
+allowBuilds:
+  msgpackr-extract: false

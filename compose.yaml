@@ -1,0 +1,24 @@
+# Local services for development and the verify:quick gate. Valkey, not Redis 8 (ADR 0004).
+name: fieldtest
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: fieldtest
+      POSTGRES_PASSWORD: fieldtest
+      POSTGRES_DB: fieldtest
+    ports: ["127.0.0.1:25432:5432"]
+    volumes: [postgres:/var/lib/postgresql]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "fieldtest", "-d", "fieldtest"]
+      interval: 2s
+      retries: 30
+  redis:
+    image: valkey/valkey:8-alpine
+    ports: ["127.0.0.1:26379:6379"]
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 2s
+      retries: 30
+volumes:
+  postgres:

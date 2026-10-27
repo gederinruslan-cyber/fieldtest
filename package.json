@@ -1,0 +1,24 @@
+{
+  "name": "fieldtest",
+  "private": true,
+  "packageManager": "pnpm@11.1.2",
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "check": "bash scripts/engine.sh check && biome lint . && turbo run typecheck test",
+    "format": "biome format --write . && bash scripts/engine.sh fmt",
+    "format:check": "biome format .",
+    "licenses:check": "bash scripts/engine.sh licenses && node scripts/licenses.mjs",
+    "verify": "pnpm check && pnpm format:check && pnpm licenses:check && bash scripts/engine.sh wasm && turbo run build",
+    "verify:quick": "pnpm verify && docker compose up -d --wait && turbo run test:integration",
+    "verify:full": "pnpm verify:quick && pnpm --filter @fieldtest/e2e test:e2e",
+    "ship": "bash scripts/ship.sh"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.3",
+    "@types/node": "^26.6.5",
+    "turbo": "^2.11.10",
+    "typescript": "~6.0.3"
+  }
+}

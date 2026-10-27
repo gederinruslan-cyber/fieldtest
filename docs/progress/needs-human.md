@@ -13,6 +13,16 @@
 - **Decision:** _(human)_
 -->
 
+## NH-4 · npm licenses outside ADR 0003 · blocking · Status: resolved
+- **Raised:** 2026-10-28 during F0-01 (build)
+- **Needed:** `pnpm licenses:check` refused tslib (0BSD, via bullmq and Next's @swc/helpers)
+  and caniuse-lite (CC-BY-4.0, via Next); both are unavoidable with the ADR 0001 stack.
+- **Why:** legal (license allow-list)
+- **Options:** A allow both / B allow 0BSD and exempt caniuse-lite by name / C stop —
+  **Recommendation:** A
+- **Decision:** 2026-10-28: A, allow 0BSD and CC-BY-4.0 (data) in both allow-lists; ADR 0003
+  amended. Sharp's LGPL libvips excluded as an optional dependency instead.
+
 ## NH-3 · Domain and trademark for "Fieldtest" · non-blocking · Status: open
 - **Raised:** 2026-10-28 during setup
 - **Needed:** pick and buy a domain (fieldtest.poker, fieldtest.gg, getfieldtest.com); run a

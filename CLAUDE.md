@@ -33,8 +33,8 @@ web and dependencies load from `.claude/rules/` when you touch those files.
 - **AI never invents numbers.** The coach receives engine output and may only cite numbers
   present in it; it goes only through `packages/ai-coach` with a small default model, a
   per-user cap and a fallback. The app works with AI off.
-- **Permissive licenses only.** MIT, Apache-2.0, BSD, ISC, Zlib. No AGPL or GPL code in
-  anything we ship or host (ADR 0003).
+- **Permissive licenses only.** MIT, Apache-2.0, BSD, 0BSD, ISC, Zlib; CC-BY-4.0 for data
+  only. No AGPL or GPL code in anything we ship or host (ADR 0003).
 - **User isolation below HTTP.** Every query is scoped to the user (or coach team) in the
   data layer; another user's id answers 404.
 - **Privacy.** Hand histories are personal data. Opponent names are hashed on import and never

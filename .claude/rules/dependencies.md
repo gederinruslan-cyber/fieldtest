@@ -15,8 +15,8 @@ paths:
 
 # Dependency changes (apply when touching these files)
 
-- Licenses: MIT, Apache-2.0, BSD-2/3-Clause, ISC, Zlib, Unicode only (ADR 0003). `cargo deny
-  check licenses` and `pnpm licenses:check` run in `pnpm verify`; never widen their allow-list
+- Licenses: MIT, Apache-2.0, BSD-2/3-Clause, 0BSD, ISC, Zlib, Unicode, and CC-BY-4.0 for
+  data only (ADR 0003). `cargo deny check licenses` and `pnpm licenses:check` run in `pnpm verify`; never widen their allow-list
   without a `needs-human` decision. AGPL/GPL solvers (wasm-postflop, TexasSolver) are never a
   dependency.
 - Any new runtime dependency: say in the commit why it is needed, its license, and what it
