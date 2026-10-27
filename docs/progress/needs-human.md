@@ -1,0 +1,40 @@
+# Needs Human
+
+*Open escalations from the working session. Newest first. The human answers inline under
+**Decision**, sets **Status** to `resolved`, and commits (or tells Claude). Items marked
+**blocking** stop the loop until resolved; others let it continue with unrelated work.*
+
+<!-- Template
+## NH-<n> · <title> · <blocking | non-blocking> · Status: open
+- **Raised:** YYYY-MM-DD during <feature ID> (<plan | build | ship>)
+- **Needed:** what decision or action is required
+- **Why:** money · public · legal/privacy/naming · poker-site policy · golden fixture · repeated failure · milestone
+- **Options:** A … / B … — **Recommendation:** …
+- **Decision:** _(human)_
+-->
+
+## NH-3 · Domain and trademark for "Fieldtest" · non-blocking · Status: open
+- **Raised:** 2026-10-28 during setup
+- **Needed:** pick and buy a domain (fieldtest.poker, fieldtest.gg, getfieldtest.com); run a
+  USPTO (and EUIPO if launching in the EU) search in classes 9 and 41.
+- **Why:** naming, money
+- **Decision:** _(human)_
+
+## NH-2 · Reference values from HRC and ICMIZER · non-blocking · Status: open
+- **Raised:** 2026-10-28 during setup (needed by F0-04)
+- **Needed:** about 20 benchmark spots run through HRC's free Nash/ICM tools and ICMIZER,
+  with outputs saved as plain text (spot, stacks, payouts, result, tool, date).
+- **Why:** golden fixtures are human-owned; capturing them uses third-party tools.
+- **Progress 2026-10-28:** published candidates collected in
+  [`nh2-reference-candidates.md`](nh2-reference-candidates.md): 7-card category counts, 26
+  exact HU equities (reproduced by enumeration), ICM examples, HU push/fold Nash from HRC.
+  Still open: multiway ICM push/fold and bounty spots from HRC/ICMIZER, and approval of the
+  candidates.
+- **Decision:** _(human)_
+
+## NH-1 · GitHub repository and first commit · blocking · Status: open
+- **Raised:** 2026-10-28 during setup
+- **Needed:** create a private GitHub repo `fieldtest`, add it as `origin`, and push the
+  initial commit on `main`. `pnpm ship` needs `origin`.
+- **Why:** public/outward-facing action
+- **Decision:** _(human)_
