@@ -12,3 +12,7 @@ unsafe_code = "forbid"
 
 [workspace.lints.clippy]
 all = { level = "deny", priority = -1 }
+
+# The full 7-card enumeration test runs in `pnpm check`; optimised it takes seconds.
+[profile.test]
+opt-level = 3
