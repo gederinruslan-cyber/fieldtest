@@ -1,5 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "noEmit": true, "lib": ["ES2023", "WebWorker"] },
+  "compilerOptions": {
+    "noEmit": true,
+    "lib": ["ES2023", "WebWorker"],
+    "allowImportingTsExtensions": true
+  },
   "include": ["src", "pkg/*.d.ts"]
 }

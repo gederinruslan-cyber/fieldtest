@@ -1,6 +1,6 @@
 import init from "../pkg/fieldtest_wasm.js";
-import { handle } from "./handle.js";
-import type { EngineRequest, EngineResponse } from "./pool.js";
+import { handle } from "./handle.ts";
+import type { EngineRequest, EngineResponse } from "./pool.ts";
 
 // Web Worker entry: the engine never runs on the main thread.
 const ready = init();

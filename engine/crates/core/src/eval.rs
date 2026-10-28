@@ -51,7 +51,7 @@ fn hand(category: Category, ranks: impl Iterator<Item = u8>) -> HandRank {
     HandRank(value << (4 * (5 - count)))
 }
 
-fn bit(rank: u8) -> u16 {
+pub(crate) fn bit(rank: u8) -> u16 {
     1 << rank
 }
 
@@ -61,7 +61,7 @@ fn ranks(mask: u16) -> impl Iterator<Item = u8> {
 }
 
 /// The top rank of the highest straight in a 13-bit mask; the ace also plays low (wheel).
-fn straight_high(mask: u16) -> Option<u8> {
+pub(crate) fn straight_high(mask: u16) -> Option<u8> {
     let with_low_ace = mask << 1 | mask >> 12;
     (4..14u8)
         .rev()

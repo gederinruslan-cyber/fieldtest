@@ -1,4 +1,58 @@
 :root {
   color-scheme: light dark;
-  font-family: system-ui, sans-serif;
+  --paper: #f6f3ec;
+  --panel: #fffdf8;
+  --ink: #1d211f;
+  --muted: #5a605c;
+  --rule: #d9d3c6;
+  --felt: #1f5c43;
+  --felt-ink: #ffffff;
+  --felt-soft: #d7e7dd;
+  --red-suit: #b3261e;
+  --blue-suit: #1f4fa3;
+  --green-suit: #23703f;
+  --focus: #c27a00;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #121614;
+    --panel: #1a1f1c;
+    --ink: #ece8df;
+    --muted: #a7aea9;
+    --rule: #2f3632;
+    --felt: #3f9b72;
+    --felt-ink: #08130e;
+    --felt-soft: #1f3a2d;
+    --red-suit: #f08b84;
+    --blue-suit: #8db2f2;
+    --green-suit: #7fcf9b;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+
+h1,
+h2 {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: var(--felt);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }

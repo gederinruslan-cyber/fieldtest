@@ -1,21 +1,32 @@
 import * as engine from "../pkg/fieldtest_wasm.js";
 
-/** What each engine function returns on success. */
-export interface EngineResults {
-  normalizeRange: string;
-  rangeSize: number;
-  evaluateHand: number;
-  handCategory: string;
+/** The engine's browser functions; the WASM module must satisfy this shape. */
+export interface EngineApi {
+  normalizeRange(range: string): string;
+  rangeSize(range: string): number;
+  evaluateHand(cards: string): number;
+  handCategory(cards: string): string;
+  analysisLabels(): string[];
+  analyzeRange(range: string, board: string): Float64Array;
+  filterRange(range: string, board: string, keep: string): string;
+  gridWeights(range: string): Float64Array;
+  setClass(range: string, hand: string, weight: number): string;
 }
 
-export type EngineFunction = keyof EngineResults;
-export type EngineCall = { [F in EngineFunction]: { fn: F; arg: string } }[EngineFunction];
+const api: EngineApi = engine;
+
+export type EngineFunction = keyof EngineApi;
+export type EngineValue<F extends EngineFunction> = ReturnType<EngineApi[F]>;
+export type EngineCall = {
+  [F in EngineFunction]: { fn: F; args: Parameters<EngineApi[F]> };
+}[EngineFunction];
 export type EngineResult<T> = { ok: true; value: T } | { ok: false; code: string };
 
 /** Runs one call against the initialised WASM module; an engine error becomes its code. */
-export function handle(call: EngineCall): EngineResult<EngineResults[EngineFunction]> {
+export function handle(call: EngineCall): EngineResult<EngineValue<EngineFunction>> {
   try {
-    return { ok: true, value: engine[call.fn](call.arg) };
+    const fn = api[call.fn] as (...args: unknown[]) => EngineValue<EngineFunction>;
+    return { ok: true, value: fn(...call.args) };
   } catch (code) {
     return { ok: false, code: String(code) };
   }

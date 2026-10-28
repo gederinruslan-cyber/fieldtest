@@ -1,4 +1,4 @@
-import type { EngineCall, EngineFunction, EngineResult, EngineResults } from "./handle.js";
+import type { EngineApi, EngineCall, EngineFunction, EngineResult, EngineValue } from "./handle.ts";
 
 export type EngineRequest = { id: number; call: EngineCall };
 export type EngineResponse = { id: number; result: EngineResult<unknown> };
@@ -10,7 +10,10 @@ export interface WorkerLike {
 }
 
 export type EnginePool = {
-  [F in EngineFunction]: (arg: string) => Promise<EngineResult<EngineResults[F]>>;
+  call<F extends EngineFunction>(
+    fn: F,
+    ...args: Parameters<EngineApi[F]>
+  ): Promise<EngineResult<EngineValue<F>>>;
 };
 
 /** Spreads calls round-robin over the workers and hands each answer back to its caller. */
@@ -23,21 +26,15 @@ export function createEnginePool(workers: WorkerLike[]): EnginePool {
       pending.delete(data.id);
     });
   }
-  const call =
-    <F extends EngineFunction>(fn: F) =>
-    (arg: string) => {
+  return {
+    call(fn, ...args) {
       const id = nextId++;
       const worker = workers[id % workers.length] as WorkerLike;
-      return new Promise<EngineResult<EngineResults[F]>>((resolve) => {
+      return new Promise((resolve) => {
         pending.set(id, resolve as (result: EngineResult<unknown>) => void);
-        worker.postMessage({ id, call: { fn, arg } as EngineCall });
+        worker.postMessage({ id, call: { fn, args } as EngineCall });
       });
-    };
-  return {
-    normalizeRange: call("normalizeRange"),
-    rangeSize: call("rangeSize"),
-    evaluateHand: call("evaluateHand"),
-    handCategory: call("handCategory"),
+    },
   };
 }
 

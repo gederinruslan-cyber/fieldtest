@@ -4,7 +4,7 @@ import {
   type EngineRequest,
   type EngineResponse,
   type WorkerLike,
-} from "./pool.js";
+} from "./pool.ts";
 
 /** A worker that answers with its own name and the argument, after a per-call delay. */
 function fakeWorker(name: string, delays: number[]): WorkerLike {
@@ -14,7 +14,10 @@ function fakeWorker(name: string, delays: number[]): WorkerLike {
       listener = l;
     },
     postMessage({ id, call }: EngineRequest) {
-      const response: EngineResponse = { id, result: { ok: true, value: `${name}:${call.arg}` } };
+      const response: EngineResponse = {
+        id,
+        result: { ok: true, value: `${name}:${call.args[0]}` },
+      };
       setTimeout(() => listener({ data: response }), delays.shift() ?? 0);
     },
   };
@@ -22,6 +25,8 @@ function fakeWorker(name: string, delays: number[]): WorkerLike {
 
 test("each caller gets its own answer when workers reply out of order", async () => {
   const pool = createEnginePool([fakeWorker("a", [30, 0, 10]), fakeWorker("b", [20, 0])]);
-  const results = await Promise.all(["1", "2", "3", "4", "5"].map((n) => pool.normalizeRange(n)));
+  const results = await Promise.all(
+    ["1", "2", "3", "4", "5"].map((n) => pool.call("normalizeRange", n)),
+  );
   expect(results.map((r) => r.ok && r.value)).toEqual(["a:1", "b:2", "a:3", "b:4", "a:5"]);
 });

@@ -39,6 +39,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@fieldtest/engine-wasm':
+        specifier: workspace:*
+        version: link:../../packages/engine-wasm
       next:
         specifier: ^16.4.3
         version: 16.4.3(@playwright/test@1.64.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)

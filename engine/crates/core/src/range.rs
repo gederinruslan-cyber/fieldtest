@@ -12,7 +12,7 @@ use crate::{Card, Combo, Error};
 /// range.
 #[derive(Clone, PartialEq, Debug)]
 pub struct Range {
-    weights: [f64; 1326],
+    pub(crate) weights: [f64; 1326],
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -181,6 +181,46 @@ impl Range {
         Combo::all()
             .zip(self.weights.iter().copied())
             .filter(|&(_, w)| w > 0.0)
+    }
+
+    /// Mean weight of each of the 169 classes, row by row over ranks A to 2: pairs on the
+    /// diagonal, suited hands above it (row rank high), offsuit hands below it.
+    pub fn grid_weights(&self) -> [f64; 169] {
+        std::array::from_fn(|i| {
+            let (row, col) = (12 - (i / 13) as u8, 12 - (i % 13) as u8);
+            let class = match row.cmp(&col) {
+                Ordering::Equal => Class {
+                    high: row,
+                    low: row,
+                    shape: Shape::Pair,
+                },
+                Ordering::Greater => Class {
+                    high: row,
+                    low: col,
+                    shape: Shape::Suited,
+                },
+                Ordering::Less => Class {
+                    high: col,
+                    low: row,
+                    shape: Shape::Offsuit,
+                },
+            };
+            let (sum, count) = class
+                .combos()
+                .fold((0.0, 0), |(s, n), c| (s + self.weight(c), n + 1));
+            sum / f64::from(count)
+        })
+    }
+
+    /// Sets every combo of a class such as `AKs`, `AK` or `QQ`; weight 0 removes it.
+    pub fn set_class(&mut self, class: &str, weight: f64) -> Result<(), Error> {
+        if !(0.0..=1.0).contains(&weight) {
+            return Err(Error::InvalidWeight);
+        }
+        for combo in Class::parse(class).ok_or(Error::InvalidToken)?.combos() {
+            self.weights[combo.index()] = weight;
+        }
+        Ok(())
     }
 
     /// The weight every combo of the class shares, if they all share one.

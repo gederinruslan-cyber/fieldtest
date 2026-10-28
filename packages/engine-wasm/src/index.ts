@@ -1,2 +1,2 @@
-export type { EngineFunction, EngineResult, EngineResults } from "./handle.js";
-export { createBrowserEnginePool, createEnginePool, type EnginePool } from "./pool.js";
+export type { EngineApi, EngineFunction, EngineResult, EngineValue } from "./handle.ts";
+export { createBrowserEnginePool, createEnginePool, type EnginePool } from "./pool.ts";

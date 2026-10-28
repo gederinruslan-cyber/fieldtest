@@ -1,8 +1,9 @@
 //! Browser bindings for the engine: thin wrappers, no math. Every function returns a `Result`
-//! whose error is a code (`InvalidToken`, `InvalidWeight`, `InvalidCard`, `InvalidHand`);
+//! whose error is a code (`InvalidToken`, `InvalidWeight`, `InvalidCard`, `InvalidHand`,
+//! `InvalidBoard`);
 //! none panics across the boundary.
 
-use fieldtest_core::{Card, Range, evaluate};
+use fieldtest_core::{Card, Draw, HandClass, Range, analyze, evaluate, filter, parse_board};
 use wasm_bindgen::prelude::*;
 
 fn code(error: fieldtest_core::Error) -> String {
@@ -53,4 +54,76 @@ pub fn evaluate_hand(cards: &str) -> Result<u32, String> {
 #[wasm_bindgen(js_name = handCategory)]
 pub fn hand_category(cards: &str) -> Result<String, String> {
     Ok(format!("{:?}", evaluate(&hand(cards)?).category()))
+}
+
+/// The names of `analyzeRange`'s entries: the 15 hand classes, then the 3 draws.
+#[wasm_bindgen(js_name = analysisLabels)]
+pub fn analysis_labels() -> Vec<String> {
+    let classes = HandClass::ALL.iter().map(|c| format!("{c:?}"));
+    classes
+        .chain(Draw::ALL.iter().map(|d| format!("{d:?}")))
+        .collect()
+}
+
+/// The range on a board after card removal: the live weight, then per hand class (15) and
+/// per draw (3) its weight followed by its share of the live weight. Exact.
+#[wasm_bindgen(js_name = analyzeRange)]
+pub fn analyze_range(range: &str, board: &str) -> Result<Vec<f64>, String> {
+    let breakdown = analyze(
+        &Range::parse(range).map_err(code)?,
+        &parse_board(board).map_err(code)?,
+    );
+    let classes = HandClass::ALL
+        .iter()
+        .flat_map(|&c| [breakdown.class_weight(c), breakdown.class_share(c)]);
+    let draws = Draw::ALL
+        .iter()
+        .flat_map(|&d| [breakdown.draw_weight(d), breakdown.draw_share(d)]);
+    Ok(std::iter::once(breakdown.live())
+        .chain(classes)
+        .chain(draws)
+        .collect())
+}
+
+/// The live combos whose class or draw is named in `keep` (comma separated, as in
+/// `analysisLabels`), in canonical notation.
+#[wasm_bindgen(js_name = filterRange)]
+pub fn filter_range(range: &str, board: &str, keep: &str) -> Result<String, String> {
+    let (range, board) = (
+        Range::parse(range).map_err(code)?,
+        parse_board(board).map_err(code)?,
+    );
+    let names: Vec<&str> = keep
+        .split(',')
+        .map(str::trim)
+        .filter(|n| !n.is_empty())
+        .collect();
+    let named = |name: String| names.contains(&name.as_str());
+    let classes: Vec<HandClass> = HandClass::ALL
+        .into_iter()
+        .filter(|c| named(format!("{c:?}")))
+        .collect();
+    let draws: Vec<Draw> = Draw::ALL
+        .into_iter()
+        .filter(|d| named(format!("{d:?}")))
+        .collect();
+    if classes.len() + draws.len() != names.len() {
+        return Err("InvalidToken".into());
+    }
+    Ok(filter(&range, &board, &classes, &draws).to_string())
+}
+
+/// Mean weight of each of the 169 grid cells, row by row over ranks A to 2 (pairs on the
+/// diagonal, suited above it, offsuit below).
+#[wasm_bindgen(js_name = gridWeights)]
+pub fn grid_weights(range: &str) -> Result<Vec<f64>, String> {
+    Ok(Range::parse(range).map_err(code)?.grid_weights().to_vec())
+}
+
+/// The range with every combo of `class` (e.g. `AKs`) set to `weight`, canonical.
+#[wasm_bindgen(js_name = setClass)]
+pub fn set_class(range: &str, class: &str, weight: f64) -> Result<String, String> {
+    let mut range = Range::parse(range).map_err(code)?;
+    range.set_class(class, weight).map_err(code)?;
+    Ok(range.to_string())
 }

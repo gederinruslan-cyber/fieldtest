@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { beforeAll, expect, test } from "vitest";
 import { initSync } from "../pkg/fieldtest_wasm.js";
-import { type EngineCall, handle } from "./handle.js";
+import { type EngineCall, type EngineResult, handle } from "./handle.ts";
 
 beforeAll(() => {
   initSync({ module: readFileSync(new URL("../pkg/fieldtest_wasm_bg.wasm", import.meta.url)) });
@@ -54,56 +54,111 @@ function seededHands(count: number): string[] {
   });
 }
 
+/** Seeded spots: five single combos and a 3- to 5-card board (overlaps test card removal). */
+function seededSpots(count: number): [string, string][] {
+  const hands = seededHands(count * 2);
+  return Array.from({ length: count }, (_, i) => {
+    const cards = (hands[2 * i] as string).split(" ");
+    const range = [0, 2].map((j) => `${cards[j]}${cards[j + 1]}`).join(",");
+    return [
+      range,
+      (hands[2 * i + 1] as string)
+        .split(" ")
+        .slice(0, 3 + (i % 3))
+        .join(" "),
+    ];
+  });
+}
+
+const SPOTS: [string, string][] = [
+  ["AA", "Ah 7c 2d"],
+  ["AK", "Kh 7c 2d"],
+  ["AhQh", "Kh 7h 2c"],
+  ["98s", "Tc 7d 2s"],
+  ["J9o", "Qc 8d 2s"],
+  ["AhAd", "9c 8d 7s 6h"],
+  ["22+,A2s+,KTo+:0.5", "Kh 9c 4d 4s 2h"],
+  ["AA", "Ah 7c"],
+  ["AKx", "Ah 7c 2d"],
+  ...seededSpots(300),
+];
+
 const CALLS: EngineCall[] = [
-  ...RANGES.flatMap((r) => [
-    { fn: "normalizeRange", arg: r } as const,
-    { fn: "rangeSize", arg: r } as const,
+  { fn: "analysisLabels", args: [] },
+  ...RANGES.flatMap((r): EngineCall[] => [
+    { fn: "normalizeRange", args: [r] },
+    { fn: "rangeSize", args: [r] },
+    { fn: "gridWeights", args: [r] },
+    { fn: "setClass", args: [r, "AKo", 0.5] },
   ]),
-  ...[...HANDS, ...seededHands(3000)].flatMap((h) => [
-    { fn: "evaluateHand", arg: h } as const,
-    { fn: "handCategory", arg: h } as const,
+  ...[...HANDS, ...seededHands(3000)].flatMap((h): EngineCall[] => [
+    { fn: "evaluateHand", args: [h] },
+    { fn: "handCategory", args: [h] },
+  ]),
+  ...SPOTS.flatMap(([range, board]): EngineCall[] => [
+    { fn: "analyzeRange", args: [range, board] },
+    { fn: "filterRange", args: [range, board, "Set,TopPair,FlushDraw"] },
   ]),
 ];
 
+const NUMBERS = new Set(["rangeSize", "evaluateHand"]);
+const LISTS = new Set(["analyzeRange", "gridWeights"]);
+
+/** Reads a native `ok<TAB>value` / `err<TAB>code` line as the result WASM gives. */
+function nativeResult(fn: string, line: string): EngineResult<unknown> {
+  const [status, text = ""] = line.split("\t");
+  if (status === "err") return { ok: false, code: text };
+  if (NUMBERS.has(fn)) return { ok: true, value: Number(text) };
+  if (LISTS.has(fn)) return { ok: true, value: text === "" ? [] : text.split(",").map(Number) };
+  if (fn === "analysisLabels") return { ok: true, value: text.split(",") };
+  return { ok: true, value: text };
+}
+
 test("WASM answers the reference set exactly as the native engine does", () => {
   const native = execFileSync("bash", ["../../scripts/engine.sh", "reference"], {
-    input: CALLS.map((c) => `${c.fn}\t${c.arg}`).join("\n"),
+    input: CALLS.map((c) => [c.fn, ...c.args].join("\t")).join("\n"),
     encoding: "utf8",
   })
     .trimEnd()
     .split("\n");
   const wasm = CALLS.map((c) => {
     const r = handle(c);
-    if (!r.ok) return `err\t${r.code}`;
-    return `ok\t${Object.is(r.value, -0) ? "-0" : r.value}`;
+    return r.ok && r.value instanceof Float64Array ? { ok: true, value: [...r.value] } : r;
   });
-  expect(wasm).toEqual(native);
+  // toEqual compares numbers with Object.is, so -0 and 0 differ.
+  expect(wasm).toEqual(CALLS.map((c, i) => nativeResult(c.fn, native[i] ?? "")));
 });
 
 test("reference values come through WASM", () => {
-  expect(handle({ fn: "rangeSize", arg: "QQ+,AKs:0.5" })).toEqual({ ok: true, value: 20 });
-  expect(handle({ fn: "rangeSize", arg: "22+" })).toEqual({ ok: true, value: 78 });
-  expect(handle({ fn: "normalizeRange", arg: "AKs,AQs,AJs,ATs" })).toEqual({
+  expect(handle({ fn: "rangeSize", args: ["QQ+,AKs:0.5"] })).toEqual({ ok: true, value: 20 });
+  expect(handle({ fn: "rangeSize", args: ["22+"] })).toEqual({ ok: true, value: 78 });
+  expect(handle({ fn: "normalizeRange", args: ["AKs,AQs,AJs,ATs"] })).toEqual({
     ok: true,
     value: "ATs+",
   });
-  expect(handle({ fn: "handCategory", arg: "As Ks Qs Js Ts" })).toEqual({
+  expect(handle({ fn: "handCategory", args: ["As Ks Qs Js Ts"] })).toEqual({
     ok: true,
     value: "StraightFlush",
   });
-  const wheel = handle({ fn: "evaluateHand", arg: "Ac 2d 3h 4s 5c" });
-  const six = handle({ fn: "evaluateHand", arg: "2c 3d 4h 5s 6c" });
+  const wheel = handle({ fn: "evaluateHand", args: ["Ac 2d 3h 4s 5c"] });
+  const six = handle({ fn: "evaluateHand", args: ["2c 3d 4h 5s 6c"] });
   expect(wheel.ok && six.ok && wheel.value < six.value).toBe(true);
 });
 
 test("bad input comes back as an error code", () => {
-  expect(handle({ fn: "normalizeRange", arg: "AKx" })).toEqual({ ok: false, code: "InvalidToken" });
-  expect(handle({ fn: "evaluateHand", arg: "As Ks" })).toEqual({ ok: false, code: "InvalidHand" });
-  expect(handle({ fn: "evaluateHand", arg: "As As Kd Qc Jh" })).toEqual({
+  expect(handle({ fn: "normalizeRange", args: ["AKx"] })).toEqual({
+    ok: false,
+    code: "InvalidToken",
+  });
+  expect(handle({ fn: "evaluateHand", args: ["As Ks"] })).toEqual({
     ok: false,
     code: "InvalidHand",
   });
-  expect(handle({ fn: "evaluateHand", arg: "As Ks Qs Js 1s" })).toEqual({
+  expect(handle({ fn: "evaluateHand", args: ["As As Kd Qc Jh"] })).toEqual({
+    ok: false,
+    code: "InvalidHand",
+  });
+  expect(handle({ fn: "evaluateHand", args: ["As Ks Qs Js 1s"] })).toEqual({
     ok: false,
     code: "InvalidCard",
   });

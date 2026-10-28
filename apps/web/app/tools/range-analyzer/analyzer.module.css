@@ -1,0 +1,292 @@
+.page {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+.header {
+  max-width: 44rem;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.05;
+  margin: 0.2rem 0 0.8rem;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--felt);
+}
+
+.lede,
+.notes p {
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.notes {
+  max-width: 44rem;
+  margin-top: 3rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 1rem;
+}
+
+.workspace {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Side by side only when both the grid and the 13-column deck fit at 44px targets. */
+@media (min-width: 1440px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .results {
+    grid-column: 1 / -1;
+  }
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1.25rem;
+}
+
+.panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.35rem;
+}
+
+.rangeForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rangeForm label {
+  font-weight: 600;
+}
+
+.rangeInput {
+  flex: 1 1 16rem;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  font: 1rem var(--mono);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+.primary,
+.secondary {
+  min-height: 44px;
+  padding: 0 1.1rem;
+  font: 600 0.95rem var(--sans);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.primary {
+  color: var(--felt-ink);
+  background: var(--felt);
+  border: 1px solid var(--felt);
+}
+
+.primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.secondary {
+  margin-top: 0.75rem;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--rule);
+}
+
+.error {
+  color: var(--red-suit);
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* 13x13 grid: 44px targets, scrolls sideways on narrow screens. */
+.gridScroll {
+  overflow-x: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(13, minmax(44px, 1fr));
+  gap: 2px;
+  min-width: calc(13 * 44px + 12 * 2px);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  min-height: 44px;
+  padding: 0;
+  font: 600 0.78rem var(--mono);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cell small {
+  font-size: 0.62rem;
+  font-weight: 400;
+}
+
+.cell[data-weight="full"] {
+  color: var(--felt-ink);
+  background: var(--felt);
+  border-color: var(--felt);
+}
+
+/* Partial weight: hatched, and the cell prints its percentage. */
+.cell[data-weight="partial"] {
+  border-color: var(--felt);
+  background: repeating-linear-gradient(135deg, var(--felt-soft) 0 4px, var(--paper) 4px 8px);
+}
+
+.boardLine {
+  display: flex;
+  gap: 0.5rem;
+  min-height: 3rem;
+  align-items: center;
+  margin: 0 0 0.5rem;
+}
+
+.boardCard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 3.4rem;
+  font: 700 1.1rem var(--mono);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+.prompt {
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+  color: var(--felt);
+}
+
+.deck {
+  display: grid;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.suitRow {
+  display: grid;
+  grid-template-columns: repeat(13, minmax(44px, 1fr));
+  gap: 4px;
+  min-width: calc(13 * 44px + 12 * 4px);
+}
+
+.card {
+  min-height: 44px;
+  font: 600 0.9rem var(--mono);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.card[aria-pressed="true"] {
+  border: 2px solid var(--ink);
+  box-shadow: inset 0 -3px 0 var(--felt);
+}
+
+.card:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Four-colour deck; the suit symbol is always printed too. */
+.card[data-suit="s"],
+.boardCard[data-suit="s"] {
+  color: var(--ink);
+}
+.card[data-suit="h"],
+.boardCard[data-suit="h"] {
+  color: var(--red-suit);
+}
+.card[data-suit="d"],
+.boardCard[data-suit="d"] {
+  color: var(--blue-suit);
+}
+.card[data-suit="c"],
+.boardCard[data-suit="c"] {
+  color: var(--green-suit);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.table caption {
+  text-align: left;
+  padding-bottom: 0.6rem;
+  color: var(--muted);
+}
+
+.table thead th,
+.table tbody th,
+.table td {
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+}
+
+.table td {
+  font-family: var(--mono);
+}
+
+.table thead th {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.table .groupRow th {
+  padding-top: 1rem;
+  font-family: var(--serif);
+  font-size: 1rem;
+}
+
+.check {
+  width: 24px;
+  height: 24px;
+  margin: 10px;
+  accent-color: var(--felt);
+}
