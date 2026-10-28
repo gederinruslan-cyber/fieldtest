@@ -30,7 +30,7 @@
 - **Why:** naming, money
 - **Decision:** _(human)_
 
-## NH-2 · Reference values from HRC and ICMIZER · non-blocking · Status: open
+## NH-2 · Reference values from HRC and ICMIZER · non-blocking · Status: resolved
 - **Raised:** 2026-10-28 during setup (needed by F0-04)
 - **Needed:** about 20 benchmark spots run through HRC's free Nash/ICM tools and ICMIZER,
   with outputs saved as plain text (spot, stacks, payouts, result, tool, date).
@@ -49,7 +49,15 @@
   bounty, both checked). Still unpublished anywhere we found: multiway ICM push/fold with stated
   payouts, and solver bounty calling ranges; those still need an HRC/ICMIZER run.
 - **Progress 2026-10-28:** human approved §5–§7; added to `engine/fixtures/`.
-- **Decision:** _(human)_
+- **Decision:** 2026-10-28: the human approved §1–§7 (now in `engine/fixtures/`) and delegated
+  closing the rest to Claude. HoldemResources' free Nash ICM calculator is CAPTCHA-protected, so
+  it is not automated, and no published multiway ICM spots with stated payouts or solver bounty
+  ranges exist that we could find. Closed as follows: F1-03 is checked against the HRC fixtures
+  (heads-up §4, 3-player §5) plus an exact best-response test (no player gains more than a stated
+  ε by deviating from the computed ranges, for any payouts, ICM included), with ICM terminal
+  values pinned by `icm.csv`; F1-04 uses the same solver and best-response test with bounty
+  payoffs plus the §7 arithmetic, assumptions stated on the page. HRC/ICMIZER spots the human
+  captures later can be added as new fixtures; they are no longer required.
 
 ## NH-1 · GitHub repository and first commit · blocking · Status: resolved
 - **Raised:** 2026-10-28 during setup
