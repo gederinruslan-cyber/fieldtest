@@ -36,7 +36,7 @@ cost. Everything merges on a green `verify:quick` gate.
 | F1-02 | icm-calculator ∑ | todo | F0-03, F0-04 | Malmuth-Harville ICM, exact; equities sum to the prize pool; matches the reference set |
 | F1-03 | push-fold-nash ∑ | todo | F1-02 | Heads-up then multiway push/fold Nash with ICM; matches HRC's free Nash tool on the reference set; unlimited and free |
 | F1-04 | bounty-calculators ∑ | todo | F1-03 | PKO and Mystery Bounty adjustments to calling ranges, assumptions stated on the page |
-| F1-05 | range-analyzer | in-progress | F0-03 | 13×13 grid, board picker, made-hand and draw breakdown with combo counts, filters carried to the next street |
+| F1-05 | range-analyzer | done `71c37ae` | F0-03 | 13×13 grid, board picker, made-hand and draw breakdown with combo counts, filters carried to the next street |
 | F1-06 | range-advantage-and-textures ∑ | todo | F1-05 | Range and nut advantage per board; texture report across all 1,755 flops |
 | F1-07 | free-tools-public | todo | F1-01…F1-06 | Static pages, sitemap, titles; deploy is a human checkpoint |
 
