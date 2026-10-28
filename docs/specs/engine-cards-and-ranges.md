@@ -29,5 +29,5 @@
 - Over all 133,784,560 seven-card hands the category counts are exact (tolerance 0): straight
   flush 41,584 (royal 4,324), quads 224,848, full house 3,473,184, flush 4,047,644, straight
   6,180,020, trips 6,461,620, two pair 31,433,400, pair 58,627,800, high card 23,294,460
-  (Wikipedia "Poker probability"; moves into `engine/fixtures/` with F0-04).
+  (golden fixture `engine/fixtures/seven-card-categories.csv`).
 - The wheel `A2345` is the lowest straight; `AKQJT` suited is the highest hand.
