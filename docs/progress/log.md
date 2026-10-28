@@ -2,6 +2,7 @@
 
 *One line per meaningful event, newest first.*
 
+- 2026-10-28 · NH-2 §5–§7 approved and added to `engine/fixtures/` (48b1a5a); M0 verifier VERIFIED.
 - 2026-10-28 · F0-04 `nh2-fixtures` merged (48b1a5a); local verify:quick.
 - 2026-10-28 · F0-04 specs folded into `docs/specs/reference-fixtures.md`; NH-2 §1–§4 approved by the human; multiway ICM and bounty spots still open. M0 rows all done.
 - 2026-10-28 · F0-04 `reference-fixtures` merged (838f2ae); local verify:quick.
