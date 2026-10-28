@@ -1,0 +1,14 @@
+# Seven-card hand categories over all C(52,7) = 133,784,560 hands.
+# Source: https://en.wikipedia.org/wiki/Poker_probability (7-card hands), retrieved 2026-10-28.
+# Approved: NH-2 §1, 2026-10-28. Tolerance: exact.
+category,hands
+Royal flush,4324
+Straight flush (not royal),37260
+Four of a kind,224848
+Full house,3473184
+Flush,4047644
+Straight,6180020
+Three of a kind,6461620
+Two pair,31433400
+One pair,58627800
+High card,23294460

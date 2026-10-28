@@ -1,24 +1,12 @@
+mod common;
+
+use common::fixture;
 use fieldtest_core::{Card, Category, evaluate};
 use proptest::prelude::*;
 
 fn cards(s: &str) -> Vec<Card> {
     s.split_whitespace().map(|c| c.parse().unwrap()).collect()
 }
-
-/// Wikipedia "Poker probability", 7-card hands (NH-2 §1). Exact. Moves into
-/// `engine/fixtures/` with F0-04 once the human approves the candidates.
-const SEVEN_CARD_COUNTS: [(Category, u64); 9] = [
-    (Category::HighCard, 23_294_460),
-    (Category::Pair, 58_627_800),
-    (Category::TwoPair, 31_433_400),
-    (Category::Trips, 6_461_620),
-    (Category::Straight, 6_180_020),
-    (Category::Flush, 4_047_644),
-    (Category::FullHouse, 3_473_184),
-    (Category::Quads, 224_848),
-    (Category::StraightFlush, 41_584),
-];
-const ROYAL_FLUSHES: u64 = 4_324;
 
 #[test]
 fn seven_card_category_counts_are_exact() {
@@ -40,11 +28,29 @@ fn seven_card_category_counts_are_exact() {
             idx[j] = idx[j - 1] + 1;
         }
     }
-    assert_eq!(counts.iter().sum::<u64>(), 133_784_560);
-    for (category, expected) in SEVEN_CARD_COUNTS {
-        assert_eq!(counts[category as usize], expected, "{category:?}");
+    // Golden fixture (NH-2 §1), exact.
+    let mut expected = [0u64; 9];
+    for row in fixture("seven-card-categories.csv") {
+        let hands: u64 = row[1].parse().unwrap();
+        let category = match row[0].as_str() {
+            "Royal flush" => {
+                assert_eq!(royals, hands, "royal flushes");
+                Category::StraightFlush
+            }
+            "Straight flush (not royal)" => Category::StraightFlush,
+            "Four of a kind" => Category::Quads,
+            "Full house" => Category::FullHouse,
+            "Flush" => Category::Flush,
+            "Straight" => Category::Straight,
+            "Three of a kind" => Category::Trips,
+            "Two pair" => Category::TwoPair,
+            "One pair" => Category::Pair,
+            "High card" => Category::HighCard,
+            other => panic!("unknown category {other}"),
+        };
+        expected[category as usize] += hands;
     }
-    assert_eq!(royals, ROYAL_FLUSHES);
+    assert_eq!(counts, expected);
 }
 
 #[test]

@@ -38,8 +38,11 @@
 - **Progress 2026-10-28:** published candidates collected in
   [`nh2-reference-candidates.md`](nh2-reference-candidates.md): 7-card category counts, 26
   exact HU equities (reproduced by enumeration), ICM examples, HU push/fold Nash from HRC.
-  Still open: multiway ICM push/fold and bounty spots from HRC/ICMIZER, and approval of the
-  candidates.
+  Still open: multiway ICM push/fold and bounty spots from HRC/ICMIZER.
+- **Progress 2026-10-28 (F0-04):** human approved candidates §1 (7-card counts), §2 (26 HU
+  equities), §3 (ICM: Wikipedia example and symmetry case only; the two unretrieved sources are
+  excluded) and §4 (HU push/fold Nash) as golden fixtures in `engine/fixtures/`. Multiway ICM
+  push/fold and bounty spots are added with F1-03/F1-04 once captured.
 - **Decision:** _(human)_
 
 ## NH-1 · GitHub repository and first commit · blocking · Status: resolved

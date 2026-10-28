@@ -1,0 +1,8 @@
+# Malmuth-Harville ICM equities. Stacks, payouts and values are slash-separated per player.
+# Sources: https://en.wikipedia.org/wiki/Independent_Chip_Model (rounded published values), retrieved 2026-10-28;
+# exact values recomputed with rational arithmetic (1265/28, 129/4, 158/7) and approved by the human.
+# Symmetry row: equal stacks share the pool equally.
+# Approved: NH-2 §3, 2026-10-28. Tolerance: 1e-9 of the prize pool against `exact`; `published` is the source's whole-number approximation (±1).
+case,stacks,payouts,published,exact
+wikipedia-50-30-20,50/30/20,70/30,45/32/22,45.17857142857143/32.25/22.571428571428573
+symmetry-4x2500,2500/2500/2500/2500,50/30/20,-,25/25/25/25
