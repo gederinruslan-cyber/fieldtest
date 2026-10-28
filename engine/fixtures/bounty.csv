@@ -1,0 +1,12 @@
+# Bounty arithmetic: worked examples of defined formulas (they pin the arithmetic, not a solver's ranges).
+# cardplayer-pko: https://www.cardplayer.com/?p=1616036 ("How to Play Progressive Knockout Poker Tournaments: Adjusted
+#   EV", undated), retrieved 2026-10-28. $100 PKO, 500 entrants x 10,000 chips, $25,000 prize + $25,000 bounty pool,
+#   400 left; bounty power 5,000,000 / (25,000 + 22,500) printed as 105 chips per $; $25 of a $50 bounty paid now =
+#   2,625 chips; BU shoves 3,000 at 100/200/200a, BB calls 2,800, other pot 500 (not itemised). Required equity, %.
+# gtowizard-mystery: https://www.pokernews.com/strategy/your-guide-to-knockout-poker-formats-47675.htm (2025-01-30),
+#   retrieved 2026-10-28. Average mystery bounty in bb = ((pool / players) / buy-in x starting stack) / BB.
+# Approved: NH-2 §7, 2026-10-28. Tolerance: the printed rounding (0.05 pp; 0.5 bb).
+case,quantity,published,exact
+cardplayer-pko,required equity with bounty (%),31.4,31.372549019607842
+cardplayer-pko,required equity without bounty (%),44.4,44.44444444444444
+gtowizard-mystery,average bounty (bb),19,18.939393939393938

@@ -71,3 +71,24 @@ fn push_fold_rows_cover_two_to_twenty_big_blinds() {
         }
     }
 }
+
+#[test]
+fn three_player_ranges_cover_every_decision() {
+    let rows = fixture("three-player-push-fold.csv");
+    assert_eq!(rows.len(), 6);
+    for row in rows {
+        assert!((0.0..=100.0).contains(&number(&row[1])), "{row:?}");
+        assert!(!row[2].is_empty(), "{row:?}");
+    }
+}
+
+#[test]
+fn bounty_examples_match_their_printed_rounding() {
+    for row in fixture("bounty.csv") {
+        let tolerance = if row[1].ends_with("(bb)") { 0.5 } else { 0.05 };
+        assert!(
+            (number(&row[2]) - number(&row[3])).abs() <= tolerance,
+            "{row:?}"
+        );
+    }
+}

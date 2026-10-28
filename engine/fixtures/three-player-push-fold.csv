@@ -1,0 +1,12 @@
+# Three-player push/fold Nash ranges, winner takes all (so ICM equals chip EV): checks the multiway solver.
+# Source: https://www.pokerstrategy.com/strategy/sit-and-go/push-fold-play-nash-ranges/ example 7 (updated 2026-03-11,
+# ranges from HoldemResources' ICM calculator), retrieved 2026-10-28; table columns PU/CA/OC confirmed on the page.
+# Stacks BU 3200, SB 5000, BB 5000; blinds 200/400; no ante. Ranges as published (space separated; Ax+ means any ace).
+# Approved: NH-2 §5, 2026-10-28. Tolerance: ±1 hand class.
+spot,pct,range
+BU push,35.4,22+ Ax+ K4s+ K9o+ Q8s+ QTo+ J7s+ JTo T7s+ T9o 97s+ 86s+ 76s 65s
+SB call vs BU push,20.7,22+ A2s+ A7o+ K9s+ KTo+ QTs+ JTs
+BB overcall vs BU push and SB call,10.0,55+ A9s+ ATo+ KQs
+BB call vs BU push (SB folds),29.1,22+ Ax+ K7s+ K9o+ Q9s+ QTo+ J9s+
+SB push (BU folds),50.8,22+ Ax+ K2s+ K4o+ Q2s+ Q8o+ J5s+ J9o+ T6s+ T8o+ 95s+ 98o 85s+ 87o 74s+ 64s+ 54s
+BB call vs SB push,32.1,22+ Ax+ K4s+ K8o+ Q8s+ QTo+ J9s+ JTo

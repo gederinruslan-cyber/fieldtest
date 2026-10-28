@@ -48,6 +48,7 @@
   (Ganzfried & Sandholm, checked), §7 bounty arithmetic (CardPlayer PKO, GTO Wizard mystery
   bounty, both checked). Still unpublished anywhere we found: multiway ICM push/fold with stated
   payouts, and solver bounty calling ranges; those still need an HRC/ICMIZER run.
+- **Progress 2026-10-28:** human approved §5–§7; added to `engine/fixtures/`.
 - **Decision:** _(human)_
 
 ## NH-1 · GitHub repository and first commit · blocking · Status: resolved
