@@ -2,6 +2,7 @@
 
 *One line per meaningful event, newest first.*
 
+- 2026-10-28 · F0-04 `reference-fixtures` merged (838f2ae); local verify:quick.
 - 2026-10-28 · F1-05 specs folded into `docs/specs/range-analyzer.md` and `engine-wasm.md`; /review APPROVE; verify:full green on main after stopping a leftover local server on 3200.
 - 2026-10-28 · F1-05 `range-analyzer` merged (71c37ae); local verify:quick.
 - 2026-10-28 · F0-03 specs folded into `docs/specs/engine-wasm.md` and `build-and-gates.md`; /review APPROVE; parity caught an empty-range -0 (fixed); .wasm 46.6 KB gzipped.

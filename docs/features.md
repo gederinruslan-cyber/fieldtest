@@ -26,7 +26,7 @@ cost. Everything merges on a green `verify:quick` gate.
 | F0-01 | bootstrap-monorepo | done `79cb5d5` | — | pnpm + Turborepo with empty `apps/web` (Next.js), `apps/api` (Fastify), `apps/worker` (BullMQ), `packages/ui`; Cargo workspace `engine/`; `pnpm check`, `verify`, `verify:quick`, `verify:full` and `licenses:check` exist and pass; `cargo deny` configured to ADR 0003; Compose with Postgres and Redis; the Stop hook runs |
 | F0-02 | engine-cards-and-eval ∑ | done `bbb9498` | F0-01 | Card, combo and range types; range notation parses and prints round-trip; 7-card evaluator gives the exact category counts over all 133,784,560 hands |
 | F0-03 | engine-wasm-bridge ∑ | done `e7fb5f0` | F0-02 | `packages/engine-wasm` built by wasm-pack, called from a Web Worker pool with typed TS; the reference set gives identical results natively and in WASM |
-| F0-04 | reference-fixtures ∑ | in-progress | F0-02 | `engine/fixtures/` holds published equities and HRC/ICMIZER outputs with source and date (values captured by the human, NH-2) |
+| F0-04 | reference-fixtures ∑ | done `838f2ae` | F0-02 | `engine/fixtures/` holds published equities and HRC/ICMIZER outputs with source and date (values captured by the human, NH-2) |
 
 ## M1 · Free tools
 
