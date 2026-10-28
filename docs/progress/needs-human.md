@@ -43,6 +43,11 @@
   equities), §3 (ICM: Wikipedia example and symmetry case only; the two unretrieved sources are
   excluded) and §4 (HU push/fold Nash) as golden fixtures in `engine/fixtures/`. Multiway ICM
   push/fold and bounty spots are added with F1-03/F1-04 once captured.
+- **Progress 2026-10-28 (search):** new candidates for approval in the candidates file: §5
+  3-player winner-takes-all Nash (HRC via PokerStrategy), §6 peer-reviewed ICM example
+  (Ganzfried & Sandholm, checked), §7 bounty arithmetic (CardPlayer PKO, GTO Wizard mystery
+  bounty, both checked). Still unpublished anywhere we found: multiway ICM push/fold with stated
+  payouts, and solver bounty calling ranges; those still need an HRC/ICMIZER run.
 - **Decision:** _(human)_
 
 ## NH-1 · GitHub repository and first commit · blocking · Status: resolved

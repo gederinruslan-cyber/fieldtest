@@ -93,10 +93,57 @@ so tolerance proposal: ±1 hand class. **Not checked** (needs the engine's Nash 
 
 (Every stack from 1 to 20 bb is on the page.)
 
+## 5. Three-player push/fold Nash, winner takes all (F1-03, multiway solver)
+
+Source: [PokerStrategy, "Nash Ranges for the Push-or-Fold Play", example 7](https://www.pokerstrategy.com/strategy/sit-and-go/push-fold-play-nash-ranges/)
+(updated 2026-03-11; ranges from HoldemResources' ICM calculator), retrieved 2026-10-28.
+Winner takes all, so ICM equals chip EV: this checks the multiway solver, not ICM pressure.
+Stacks BU 3,200 · SB 5,000 · BB 5,000, blinds 200/400, no ante. Tolerance proposal: ±1 hand
+class. **Not checked.** The page labels columns PU / CA / OC (push, call, overcall); the
+mapping below is our reading of the table order and must be confirmed against the page.
+
+| Spot | % | Range |
+|---|---|---|
+| BU push | 35.4 | 22+, Ax+, K4s+, K9o+, Q8s+, QTo+, J7s+, JTo, T7s+, T9o, 97s+, 86s+, 76s, 65s |
+| SB call vs BU | 20.7 | 22+, A2s+, A7o+, K9s+, KTo+, QTs+, JTs |
+| BB overcall vs BU + SB | 10.0 | 55+, A9s+, ATo+, KQs |
+| BB call vs BU (SB folds) | 29.1 | 22+, Ax+, K7s+, K9o+, Q9s+, QTo+, J9s+ |
+| SB push (BU folds) | 50.8 | 22+, Ax+, K2s+, K4o+, Q2s+, Q8o+, J5s+, J9o+, T6s+, T8o+, 95s+, 98o, 85s+, 87o, 74s+, 64s+, 54s |
+| BB call vs SB | 32.1 | 22+, Ax+, K4s+, K8o+, Q8s+, QTo+, J9s+, JTo |
+
+Rejected: the same page's example 8 (4-player bubble) does not state its payouts.
+
+## 6. ICM, peer-reviewed example (F1-02)
+
+Source: Ganzfried & Sandholm, ["Computing an Approximate Jam/Fold Equilibrium for 3-player
+No-Limit Texas Hold'em Tournaments"](https://aamas.csc.liv.ac.uk/Proceedings/aamas08/proceedings/pdf/paper/AAMAS08_0313.pdf),
+AAMAS 2008, §6. Stacks BU 300 · SB 12,300 · BB 900, prize pool $100. The paper prints ICM
+predictions BU $22.96, SB $48.19, BB $28.848. **Checked:** with payouts 50 / 30 / 20 exact
+Malmuth-Harville gives 2893/126, 66793/1386, 952/33 = 22.9603 / 48.1912 / 28.8485, matching
+every printed digit (the paper does not print the payout split; 50/30/20 is the only common
+split that matches). Tolerance proposal: the printed digits (±0.005, ±0.0005 for BB).
+
+(The paper's equilibrium strategies come from a multi-hand tournament model, not single-hand
+ICM jam/fold, so they are not usable as push/fold fixtures.)
+
+## 7. Bounty arithmetic (F1-04)
+
+Worked examples of defined formulas; they pin the arithmetic, not a solver's ranges.
+
+| Source | Inputs | Published result | Checked |
+|---|---|---|---|
+| CardPlayer, "How to Play Progressive Knockout Poker Tournaments: Adjusted EV" ([page](https://www.cardplayer.com/?p=1616036), undated) | $100 PKO, 500 entrants, 10,000 starting chips (5,000,000 in play), $25,000 prize pool + $25,000 bounty pool, 400 left so remaining bounty pool $25,000 − 100 × $25 = $22,500; bounty power 5,000,000 / 47,500 = 105.26 (printed 105) chips per $; $50 bounty pays $25 now = 2,625 chips; BU shoves 3,000 at 100/200/200a, BB calls 2,800, other pot 500 (not itemised) | required equity 31.4% with bounty, 44.4% without | 2,800 / 8,925 = 31.37%, 2,800 / 6,300 = 44.44% ✓ |
+| PokerNews (GTO Wizard guide), "Your GTO Wizard Guide to Knockout Poker Formats" ([page](https://www.pokernews.com/strategy/your-guide-to-knockout-poker-formats-47675.htm), 2025-01-30) | Mystery bounty: $110 buy-in, $250,000 bounty pool, 1,200 left, 50,000 starting stack, BB 5,000; average bounty in bb = ((pool / players) / buy-in × starting stack) / BB | 19 bb | 18.94 bb ✓ (printed rounded) |
+
+Rejected: PokerNews 2020 "How To Win More From Bounty Tournaments" (its 10,950 + 4,700 is
+printed as 15,150, an arithmetic error); ICMIZER's TrueBounty figures (a proprietary model we
+cannot reproduce); DeucesCracked 2026 PKO article (no stated conversion).
+
 ## Still needs a human run
 
-- **Multiway push/fold with ICM** (bubble spots, 3–6 players, real payouts): no trustworthy
-  published table found. Run about 10 spots through HRC's free Nash tool or ICMIZER and save
+- **Multiway push/fold with ICM pressure** (bubble spots, 3–6 players, real payouts): still no
+  published table with stated payouts (searched again 2026-10-28; §5 covers the multiway solver
+  without ICM). Run about 10 spots through HRC's free Nash tool or ICMIZER and save
   the outputs.
 - **PKO and Mystery Bounty** adjustments (F1-04): no published reference values; ICMIZER is the
   usual tool.
