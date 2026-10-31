@@ -2,7 +2,8 @@
 
 *The one list of what to build, in order, with what "done" means. `/next` takes the first
 `ready` row whose dependencies are `done`. Statuses: `todo` · `ready` · `in-progress` · `done`
-· `later`. `pnpm ship` marks a row `done` with the merged SHA. Product background:
+· `later`. A row is `ready` when every row it depends on is `done`; `pnpm ship` marks a row
+`done` with the merged SHA and promotes the `todo` rows that unblocks. Product background:
 [`product-plan.md`](product-plan.md). Hard rules live in `CLAUDE.md` and `.claude/rules/`.*
 
 **Marks:** `∑` engine math, `🔒` user data or auth, `⚑` poker-site policy (imports, pools,
@@ -32,20 +33,20 @@ cost. Everything merges on a green `verify:quick` gate.
 
 | ID | Feature | Status | Depends | Done when |
 |---|---|---|---|---|
-| F1-01 | equity-calculator ∑ | todo | F0-03, F0-04 | Exact hand-vs-range and range-vs-range enumeration, Monte Carlo with stated error, up to 9 players; matches the reference equities; static page |
-| F1-02 | icm-calculator ∑ | todo | F0-03, F0-04 | Malmuth-Harville ICM, exact; equities sum to the prize pool; matches the reference set |
+| F1-01 | equity-calculator ∑ | ready | F0-03, F0-04 | Exact hand-vs-range and range-vs-range enumeration, Monte Carlo with stated error, up to 9 players; matches the reference equities; static page |
+| F1-02 | icm-calculator ∑ | ready | F0-03, F0-04 | Malmuth-Harville ICM, exact; equities sum to the prize pool; matches the reference set |
 | F1-03 | push-fold-nash ∑ | todo | F1-02 | Heads-up then multiway push/fold Nash with ICM; matches HRC's free Nash tool on the reference set; unlimited and free |
 | F1-04 | bounty-calculators ∑ | todo | F1-03 | PKO and Mystery Bounty adjustments to calling ranges, assumptions stated on the page |
 | F1-05 | range-analyzer | done `71c37ae` | F0-03 | 13×13 grid, board picker, made-hand and draw breakdown with combo counts, filters carried to the next street |
-| F1-06 | range-advantage-and-textures ∑ | todo | F1-05 | Range and nut advantage per board; texture report across all 1,755 flops |
+| F1-06 | range-advantage-and-textures ∑ | ready | F1-05 | Range and nut advantage per board; texture report across all 1,755 flops |
 | F1-07 | free-tools-public | todo | F1-01…F1-06 | Static pages, sitemap, titles; deploy is a human checkpoint |
 
 ## M2 · Core simulator
 
 | ID | Feature | Status | Depends | Done when |
 |---|---|---|---|---|
-| F2-01 | accounts-and-auth 🔒 | todo | F0-01 | Email sign-up/in, sessions, owner-scoped data with the isolation test |
-| F2-02 | tournament-engine ∑ | todo | F0-02 | Sit-and-go rules, blinds and antes, payouts; a seed replays identically |
+| F2-01 | accounts-and-auth 🔒 | ready | F0-01 | Email sign-up/in, sessions, owner-scoped data with the isolation test |
+| F2-02 | tournament-engine ∑ | ready | F0-02 | Sit-and-go rules, blinds and antes, payouts; a seed replays identically |
 | F2-03 | pool-presets-and-sliders ⚑ | todo | F2-02 | Presets (Fish, Nit, Maniac, Calling Station, TAG) and sliders; pools never exportable |
 | F2-04 | simulator-table | todo | F2-03, F0-03 | Play a full sit-and-go in the browser against a pool |
 | F2-05 | mtt-fields ∑ | todo | F2-04 | 9 to several hundred players, table balancing, late registration, fast-forward to bubble or final table |
@@ -57,7 +58,7 @@ cost. Everything merges on a green `verify:quick` gate.
 
 | ID | Feature | Status | Depends | Done when |
 |---|---|---|---|---|
-| F3-01 | estimate-then-reveal-drills ∑ | todo | F1-05 | Estimate, combo-counting and range-reading drills graded by the engine |
+| F3-01 | estimate-then-reveal-drills ∑ | ready | F1-05 | Estimate, combo-counting and range-reading drills graded by the engine |
 | F3-02 | mistake-driven-drills | todo | F2-06, F3-01 | Mistakes from tournaments become spaced-repetition drills |
 | F3-03 | ai-coach 🔒 | todo | F2-06 | Haiku-default explanations citing only engine numbers, monthly cap, works with AI off |
 | F3-04 | pokerstars-import 🔒⚑ | todo | F2-01 | Upload PokerStars files after a session; names hashed; leak stats |

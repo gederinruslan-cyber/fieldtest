@@ -5,8 +5,8 @@
 #   2. if origin/main moved, merges it into the branch and pushes (never force);
 #   3. runs `pnpm verify:quick` locally on the branch head (the gate); a red run stops here;
 #   4. squash-merges it onto origin/main (detached, so it works from any worktree);
-#   5. marks the feature row done with the SHA in docs/features.md and adds a log.md line, in
-#      a second commit;
+#   5. marks the feature row done with the SHA in docs/features.md, promotes todo rows whose
+#      dependencies are now all done to ready, and adds a log.md line, in a second commit;
 #   6. pushes main and deletes the branch (remote and local).
 # Never force-pushes. Bash 3.2 compatible.
 set -euo pipefail
@@ -53,6 +53,20 @@ row = re.compile(r"^(\| " + re.escape(item) + r" \| [^|]*\| )(?:todo|ready|in-pr
 s, n = row.subn(lambda r: f"{r.group(1)}done `{sha}`{r.group(2)}", s)
 if n == 0:
     print(f"ship: no {item} row in {p}; log line only", file=sys.stderr)
+# A todo row becomes ready once every row it depends on is done ("F1-01…F1-06" is a span).
+rows = re.compile(r"^(\| (F\d-\d\d) \| [^|]*\| )(todo|ready|in-progress|done[^|]*|later)( \| ([^|]*)\|[^\n]*)$", re.M)
+done = {r.group(2) for r in rows.finditer(s) if r.group(3).startswith("done")}
+def deps(field):
+    ids = []
+    for a, b in re.findall(r"(F\d-\d\d)(?:…(F\d-\d\d))?", field):
+        ids += [f"{a[:3]}{k:02d}" for k in range(int(a[3:]), int((b or a)[3:]) + 1)] if b else [a]
+    return ids
+def promote(r):
+    if r.group(3) == "todo" and all(d in done for d in deps(r.group(5))):
+        print(f"ship: {r.group(2)} is now ready", file=sys.stderr)
+        return f"{r.group(1)}ready{r.group(4)}"
+    return r.group(0)
+s = rows.sub(promote, s)
 open(p, "w").write(s)
 log = "docs/progress/log.md"
 lines = open(log).read().split("\n")
