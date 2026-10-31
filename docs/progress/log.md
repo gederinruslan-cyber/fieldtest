@@ -2,6 +2,7 @@
 
 *One line per meaningful event, newest first.*
 
+- 2026-10-31 · F1-01 `equity-calculator` merged (64feb2b); local verify:quick.
 - 2026-10-31 · M0 closed by the human (verifier VERIFIED 2026-10-28); M1 open.
 - 2026-10-28 · NH-2 resolved (delegated by the human): remaining multiway ICM and bounty references replaced by HRC fixtures §4–§5 plus exact best-response tests in F1-03/F1-04; HRC web tool is CAPTCHA-protected.
 - 2026-10-28 · NH-2 §5–§7 approved and added to `engine/fixtures/` (48b1a5a); M0 verifier VERIFIED.
