@@ -12,6 +12,7 @@ export interface EngineApi {
   gridWeights(range: string): Float64Array;
   setClass(range: string, hand: string, weight: number): string;
   equity(players: string, board: string, samples: number, seed: number): Float64Array;
+  icm(stacks: string, payouts: string): Float64Array;
 }
 
 const api: EngineApi = engine;

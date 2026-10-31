@@ -1,3 +1,5 @@
+/* Shared by the calculator pages (equity, ICM): header, form panel, result table. */
+
 .page {
   max-width: 60rem;
   margin: 0 auto;

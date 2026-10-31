@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { EquityCalculator } from "./EquityCalculator";
-import styles from "./equity.module.css";
+import styles from "../calculator.module.css";
 
 export const metadata: Metadata = {
   title: "Equity calculator · Fieldtest",

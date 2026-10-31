@@ -1,0 +1,12 @@
+[package]
+name = "fieldtest-icm"
+version = "0.0.0"
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+proptest = "1.12"

@@ -13,3 +13,13 @@ export function formatMargin(error: number): string {
 export function formatCombos(weight: number): string {
   return Number.isInteger(weight) ? String(weight) : weight.toFixed(2);
 }
+
+/** A prize amount to two decimals, rounded once, here. */
+export function formatAmount(amount: number): string {
+  return amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/** A chip count with thousands separators. */
+export function formatChips(chips: number): string {
+  return chips.toLocaleString("en-US");
+}

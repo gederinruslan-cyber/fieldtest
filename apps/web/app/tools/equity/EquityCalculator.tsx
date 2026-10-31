@@ -3,7 +3,7 @@
 import { createBrowserEnginePool, type EnginePool } from "@fieldtest/engine-wasm";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import { formatMargin, formatShare } from "../../../lib/format";
-import styles from "./equity.module.css";
+import styles from "../calculator.module.css";
 
 /** Monte Carlo runs this many deals with a fixed seed, so the same spot shows the same numbers. */
 const SAMPLES = 200_000;

@@ -31,6 +31,7 @@ fn main() {
                 (Ok(samples), Ok(seed)) => equity(arg(1), arg(2), samples, seed).map(list),
                 _ => Err("InvalidSamples".into()),
             },
+            "icm" => icm(arg(1), arg(2)).map(list),
             "setClass" => match arg(3).parse() {
                 Ok(weight) => set_class(arg(1), arg(2), weight),
                 Err(_) => Err("InvalidWeight".into()),

@@ -1,6 +1,7 @@
 //! Browser bindings for the engine: thin wrappers, no math. Every function returns a `Result`
 //! whose error is a code (`InvalidToken`, `InvalidWeight`, `InvalidCard`, `InvalidHand`,
-//! `InvalidBoard`, `InvalidPlayers`, `NoValidDeal`, `InvalidSamples`);
+//! `InvalidBoard`, `InvalidPlayers`, `NoValidDeal`, `InvalidSamples`, `InvalidStacks`,
+//! `InvalidPayouts`);
 //! none panics across the boundary.
 
 use fieldtest_core::{
@@ -157,4 +158,28 @@ pub fn equity(players: &str, board: &str, samples: u32, seed: u32) -> Result<Vec
         .iter()
         .flat_map(|p| [p.win, p.tie, p.equity, p.std_error]);
     Ok(head.into_iter().chain(shares).collect())
+}
+
+/// Numbers separated by spaces, commas or slashes.
+fn numbers<T: std::str::FromStr>(text: &str) -> Option<Vec<T>> {
+    text.split([' ', ',', '/'])
+        .filter(|t| !t.is_empty())
+        .map(|t| t.parse().ok())
+        .collect()
+}
+
+/// Malmuth-Harville ICM. Stacks are whole chips, payouts from first place down; gives per
+/// player the expected prize, its share of the prize pool and the player's share of the chips.
+#[wasm_bindgen]
+pub fn icm(stacks: &str, payouts: &str) -> Result<Vec<f64>, String> {
+    let stacks: Vec<u64> = numbers(stacks).ok_or("InvalidStacks")?;
+    let payouts: Vec<f64> = numbers(payouts).ok_or("InvalidPayouts")?;
+    let equity = fieldtest_icm::icm(&stacks, &payouts).map_err(|e| format!("{e:?}"))?;
+    let pool: f64 = payouts.iter().sum();
+    let chips = stacks.iter().sum::<u64>() as f64;
+    Ok(equity
+        .iter()
+        .zip(&stacks)
+        .flat_map(|(&e, &s)| [e, if pool > 0.0 { e / pool } else { 0.0 }, s as f64 / chips])
+        .collect())
 }

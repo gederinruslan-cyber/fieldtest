@@ -12,6 +12,9 @@ export default function Home() {
         <Link href="/tools/range-analyzer">Range analyzer</Link>: break a range down on any board.
       </p>
       <p>
+        <Link href="/tools/icm">ICM calculator</Link>: what each stack is worth in prize money.
+      </p>
+      <p>
         <Link href="/tools/equity">Equity calculator</Link>: hands and ranges for up to nine
         players, exact where it can be.
       </p>

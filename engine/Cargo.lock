@@ -138,10 +138,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "fieldtest-icm"
+version = "0.0.0"
+dependencies = [
+ "proptest",
+]
+
+[[package]]
 name = "fieldtest-wasm"
 version = "0.0.0"
 dependencies = [
  "fieldtest-core",
+ "fieldtest-icm",
  "wasm-bindgen",
 ]
 

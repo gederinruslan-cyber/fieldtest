@@ -99,6 +99,21 @@ const EQUITY: [string, string, number, number][] = [
   ["AA;AKx", "", 1000, 1],
 ];
 
+/** ICM spots: the reference rows, 20 players, separators, refused input. */
+const ICM: [string, string][] = [
+  ["50/30/20", "70/30"],
+  ["300, 12300, 900", "50, 30, 20"],
+  ["2500 2500 2500 2500", "50 30 20"],
+  [Array.from({ length: 20 }, (_, i) => 1000 + 137 * i).join(" "), "30 20 15 10 8 7 5 3 2"],
+  ["3200 5000 5000", "100"],
+  ["100", "1"],
+  ["100 0", "1"],
+  ["100 1.5", "1"],
+  ["100 50", ""],
+  ["1 2 3", "4 3 2 1"],
+  ["1 2 3", "4 -1"],
+];
+
 const CALLS: EngineCall[] = [
   { fn: "analysisLabels", args: [] },
   ...RANGES.flatMap((r): EngineCall[] => [
@@ -116,10 +131,11 @@ const CALLS: EngineCall[] = [
     { fn: "filterRange", args: [range, board, "Set,TopPair,FlushDraw"] },
   ]),
   ...EQUITY.map((args): EngineCall => ({ fn: "equity", args })),
+  ...ICM.map((args): EngineCall => ({ fn: "icm", args })),
 ];
 
 const NUMBERS = new Set(["rangeSize", "evaluateHand"]);
-const LISTS = new Set(["analyzeRange", "gridWeights", "equity"]);
+const LISTS = new Set(["analyzeRange", "gridWeights", "equity", "icm"]);
 
 /** Reads a native `ok<TAB>value` / `err<TAB>code` line as the result WASM gives. */
 function nativeResult(fn: string, line: string): EngineResult<unknown> {
@@ -160,6 +176,10 @@ test("reference values come through WASM", () => {
   const wheel = handle({ fn: "evaluateHand", args: ["Ac 2d 3h 4s 5c"] });
   const six = handle({ fn: "evaluateHand", args: ["2c 3d 4h 5s 6c"] });
   expect(wheel.ok && six.ok && wheel.value < six.value).toBe(true);
+  const icm = handle({ fn: "icm", args: ["50/30/20", "70/30"] });
+  expect(icm.ok && [...(icm.value as Float64Array)].filter((_, i) => i % 3 === 0)).toEqual([
+    45.17857142857143, 32.25, 22.571428571428573,
+  ]);
   const aces = handle({ fn: "equity", args: ["AhAs;KdKc", "", 1000, 1] });
   expect(aces.ok && [...(aces.value as Float64Array)].slice(0, 6)).toEqual([
     1, 1712304, 0.8106457731804633, 0.003818247227127893, 0.8125548967940273, 0,
