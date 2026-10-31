@@ -1,9 +1,12 @@
 //! Browser bindings for the engine: thin wrappers, no math. Every function returns a `Result`
 //! whose error is a code (`InvalidToken`, `InvalidWeight`, `InvalidCard`, `InvalidHand`,
-//! `InvalidBoard`);
+//! `InvalidBoard`, `InvalidPlayers`, `NoValidDeal`, `InvalidSamples`);
 //! none panics across the boundary.
 
-use fieldtest_core::{Card, Draw, HandClass, Range, analyze, evaluate, filter, parse_board};
+use fieldtest_core::{
+    Card, Draw, HandClass, Method, Range, analyze, equity as showdown, evaluate, filter,
+    parse_board,
+};
 use wasm_bindgen::prelude::*;
 
 fn code(error: fieldtest_core::Error) -> String {
@@ -126,4 +129,32 @@ pub fn set_class(range: &str, class: &str, weight: f64) -> Result<String, String
     let mut range = Range::parse(range).map_err(code)?;
     range.set_class(class, weight).map_err(code)?;
     Ok(range.to_string())
+}
+
+/// Showdown equity for 2 to 9 players, their ranges separated by `;`, on a board of 0, 3, 4 or
+/// 5 cards: exact when it fits the budget, otherwise Monte Carlo over `samples` deals drawn
+/// with `seed`. Gives 1 (exact) or 0 (Monte Carlo), the deals enumerated or samples drawn,
+/// then per player win, tie, equity and its standard error (0 when exact).
+#[wasm_bindgen]
+pub fn equity(players: &str, board: &str, samples: u32, seed: u32) -> Result<Vec<f64>, String> {
+    let ranges = players
+        .split(';')
+        .map(Range::parse)
+        .collect::<Result<Vec<_>, _>>()
+        .map_err(code)?;
+    let board = board
+        .split_whitespace()
+        .map(str::parse)
+        .collect::<Result<Vec<Card>, _>>()
+        .map_err(code)?;
+    let result = showdown(&ranges, &board, samples.into(), seed.into()).map_err(code)?;
+    let head = match result.method {
+        Method::Exact { deals } => [1.0, deals as f64],
+        Method::MonteCarlo { samples } => [0.0, samples as f64],
+    };
+    let shares = result
+        .players
+        .iter()
+        .flat_map(|p| [p.win, p.tie, p.equity, p.std_error]);
+    Ok(head.into_iter().chain(shares).collect())
 }

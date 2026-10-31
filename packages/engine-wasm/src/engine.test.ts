@@ -83,6 +83,22 @@ const SPOTS: [string, string][] = [
   ...seededSpots(300),
 ];
 
+/** Equity spots: exact postflop and multiway, seeded Monte Carlo preflop, refused input. */
+const EQUITY: [string, string, number, number][] = [
+  ["AhAs;KdKc", "Kh 7c 2d", 1000, 1],
+  ["AhKh;QQ+,AKs:0.5", "Qh 7h 2c 3s", 1000, 1],
+  ["22+,A2s+,K9s+,ATo+;22+,A2s+,K9s+,ATo+", "Kh 7c 2d", 1000, 1],
+  ["AA,KK;QQ,JJ;TT,99", "2c 3d 4h 5s 9d", 1000, 1],
+  ["AA;KK", "", 20000, 7],
+  ["22+,A2+;KQ,AK,QQ+;AhKh", "", 20000, 8],
+  ["22+;22+;22+;22+;22+;22+;22+;22+;22+", "", 5000, 9],
+  ["AA", "", 1000, 1],
+  ["AhAs;AhKd", "", 1000, 1],
+  ["AA;KK", "Ah 7c", 1000, 1],
+  ["AA;KK", "", 1, 1],
+  ["AA;AKx", "", 1000, 1],
+];
+
 const CALLS: EngineCall[] = [
   { fn: "analysisLabels", args: [] },
   ...RANGES.flatMap((r): EngineCall[] => [
@@ -99,10 +115,11 @@ const CALLS: EngineCall[] = [
     { fn: "analyzeRange", args: [range, board] },
     { fn: "filterRange", args: [range, board, "Set,TopPair,FlushDraw"] },
   ]),
+  ...EQUITY.map((args): EngineCall => ({ fn: "equity", args })),
 ];
 
 const NUMBERS = new Set(["rangeSize", "evaluateHand"]);
-const LISTS = new Set(["analyzeRange", "gridWeights"]);
+const LISTS = new Set(["analyzeRange", "gridWeights", "equity"]);
 
 /** Reads a native `ok<TAB>value` / `err<TAB>code` line as the result WASM gives. */
 function nativeResult(fn: string, line: string): EngineResult<unknown> {
@@ -143,6 +160,10 @@ test("reference values come through WASM", () => {
   const wheel = handle({ fn: "evaluateHand", args: ["Ac 2d 3h 4s 5c"] });
   const six = handle({ fn: "evaluateHand", args: ["2c 3d 4h 5s 6c"] });
   expect(wheel.ok && six.ok && wheel.value < six.value).toBe(true);
+  const aces = handle({ fn: "equity", args: ["AhAs;KdKc", "", 1000, 1] });
+  expect(aces.ok && [...(aces.value as Float64Array)].slice(0, 6)).toEqual([
+    1, 1712304, 0.8106457731804633, 0.003818247227127893, 0.8125548967940273, 0,
+  ]);
 });
 
 test("bad input comes back as an error code", () => {

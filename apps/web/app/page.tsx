@@ -11,6 +11,10 @@ export default function Home() {
       <p>
         <Link href="/tools/range-analyzer">Range analyzer</Link>: break a range down on any board.
       </p>
+      <p>
+        <Link href="/tools/equity">Equity calculator</Link>: hands and ranges for up to nine
+        players, exact where it can be.
+      </p>
     </main>
   );
 }

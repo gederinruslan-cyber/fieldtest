@@ -27,6 +27,10 @@ fn main() {
             "analyzeRange" => analyze_range(arg(1), arg(2)).map(list),
             "filterRange" => filter_range(arg(1), arg(2), arg(3)),
             "gridWeights" => grid_weights(arg(1)).map(list),
+            "equity" => match (arg(3).parse(), arg(4).parse()) {
+                (Ok(samples), Ok(seed)) => equity(arg(1), arg(2), samples, seed).map(list),
+                _ => Err("InvalidSamples".into()),
+            },
             "setClass" => match arg(3).parse() {
                 Ok(weight) => set_class(arg(1), arg(2), weight),
                 Err(_) => Err("InvalidWeight".into()),

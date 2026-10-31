@@ -10,3 +10,6 @@ workspace = true
 
 [dev-dependencies]
 proptest = "1.12"
+
+[dependencies]
+rand_chacha = { version = "0.10", default-features = false }

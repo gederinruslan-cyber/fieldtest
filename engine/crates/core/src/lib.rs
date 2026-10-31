@@ -3,12 +3,14 @@
 mod analysis;
 mod card;
 mod combo;
+mod equity;
 mod eval;
 mod range;
 
 pub use analysis::{Breakdown, Draw, HandClass, analyze, classify, draws, filter, parse_board};
 pub use card::Card;
 pub use combo::Combo;
+pub use equity::{Equity, Method, Share, equity, exact, monte_carlo};
 pub use eval::{Category, HandRank, evaluate};
 pub use range::Range;
 
@@ -19,4 +21,10 @@ pub enum Error {
     InvalidToken,
     InvalidWeight,
     InvalidBoard,
+    /// Not 2 to 9 players, or a player with an empty range.
+    InvalidPlayers,
+    /// No deal gives every player a combo without a shared card.
+    NoValidDeal,
+    /// Monte Carlo needs at least 2 samples.
+    InvalidSamples,
 }
