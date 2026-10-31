@@ -14,8 +14,8 @@ cost. Everything merges on a green `verify:quick` gate.
 
 | Milestone | Exit criteria | State |
 |---|---|---|
-| **M0 · Foundation** | Monorepo, Rust engine workspace, WASM bridge, checks and ship script, reference fixtures | open |
-| **M1 · Free tools** | Equity, ICM, push/fold and bounty calculators plus the range analyzer, public and matching HRC/ICMIZER on the reference set | |
+| **M0 · Foundation** | Monorepo, Rust engine workspace, WASM bridge, checks and ship script, reference fixtures || done 2026-10-31 |
+| **M1 · Free tools** | Equity, ICM, push/fold and bounty calculators plus the range analyzer, public and matching HRC/ICMIZER on the reference set | open |
 | **M2 · Core simulator** | Accounts; sit-and-gos then MTTs against configurable pools; exact ICM grading; leak report; trial and paywall | |
 | **M3 · Retention** | Drills from your own mistakes; capped AI coach; PokerStars import; GG upload behind a flag | |
 | **M4 · Growth** | Coach seats (after interviews), pools from imported hands, showcases, affiliates | |
