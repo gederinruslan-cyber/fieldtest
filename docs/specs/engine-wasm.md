@@ -17,16 +17,19 @@
 - `icm(stacks, payouts)`: numbers separated by spaces, commas or slashes; gives per player
   the expected prize, its share of the prize pool and the player's share of the chips; see
   `icm-calculator.md`.
+- `pushFold(stacks, blinds, payouts)`: stacks small blind first, then big blind, then folded
+  players; `blinds` is small blind, big blind and ante. Gives ε, the push share, the call
+  share, then 169 push and 169 call weights; see `push-fold-nash.md`.
 - Reference values: `rangeSize("QQ+,AKs:0.5")` = 20, `rangeSize("22+")` = 78,
   `normalizeRange("AKs,AQs,AJs,ATs")` = `ATs+`, the wheel ranks below `2c 3d 4h 5s 6c`.
 - Bad input never throws past the bridge: it answers `{ ok: false, code }` with
   `InvalidToken`, `InvalidWeight`, `InvalidCard`, `InvalidHand` (anything other than 5 to 7
-  distinct cards), `InvalidBoard`, `InvalidPlayers`, `NoValidDeal`, `InvalidSamples`, `InvalidStacks` or `InvalidPayouts`. Success is `{ ok: true, value }`.
+  distinct cards), `InvalidBoard`, `InvalidPlayers`, `NoValidDeal`, `InvalidSamples`, `InvalidStacks`, `InvalidPayouts` or `InvalidBlinds`. Success is `{ ok: true, value }`.
 
 ## Parity
 - The reference set (every range and hand in `engine-cards-and-ranges.md`, the invalid inputs,
   3,000 seeded 5- to 7-card hands, and the range-analyzer spots plus 300 seeded spots with
-  card removal, 12 equity spots, exact and seeded Monte Carlo, and 11 ICM spots) gives identical answers and error codes through WASM
+  card removal, 12 equity spots, exact and seeded Monte Carlo, 11 ICM spots and 7 push/fold spots) gives identical answers and error codes through WASM
   and natively, compared exactly (including the sign of zero). It runs in `pnpm check`.
 
 ## Worker pool

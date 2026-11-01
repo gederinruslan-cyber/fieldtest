@@ -15,7 +15,8 @@
   case, and Ganzfried & Sandholm 2008 (stacks 300/12,300/900, 50/30/20 → 22.96 / 48.19 /
   28.848); each exact row sums to the pool.
 - `hu-push-fold.csv`: heads-up push/fold Nash percentages for 2, 4, 6, 8, 10, 12, 15 and 20 bb,
-  with no ante and a 10% ante (±1 hand class).
+  with no ante and a 10% ante. Pass/fail only at 12–20 bb, within ±3 pp; the 2–8 bb rows are
+  not an equilibrium of the stated game (NH-5).
 - `three-player-push-fold.csv`: six 3-player Nash ranges (push, call, overcall) for BU 3,200 ·
   SB 5,000 · BB 5,000 at 200/400, winner takes all (±1 hand class).
 - `bounty.csv`: PKO required equity with and without a bounty (31.4% / 44.4%) and a mystery

@@ -2,6 +2,7 @@
 
 *One line per meaningful event, newest first.*
 
+- 2026-11-01 · F1-03 specs folded into `docs/specs/push-fold-nash.md`; ADR 0005; NH-5 resolved (HRC rows checked at 12–20 bb ±3 pp); multiway split to F1-08; /review APPROVE; verify:full green on main.
 - 2026-11-01 · F1-03 `push-fold-nash` merged (f335486); local verify:quick.
 - 2026-10-31 · F1-02 `icm-calculator` merged (52b95a2); local verify:quick.
 - 2026-10-31 · F1-01 `equity-calculator` merged (64feb2b); local verify:quick.
