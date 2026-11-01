@@ -141,6 +141,7 @@ dependencies = [
 name = "fieldtest-icm"
 version = "0.0.0"
 dependencies = [
+ "fieldtest-core",
  "proptest",
 ]
 

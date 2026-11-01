@@ -1,0 +1,72 @@
+/* Read-only 13x13 range grids: no targets, so they fit a 360px screen without scrolling. */
+.ranges {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .ranges {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.range h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.share {
+  margin: 0 0 0.75rem;
+  font: 600 1.6rem var(--mono);
+}
+
+.grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 1px;
+  table-layout: fixed;
+}
+
+.grid td {
+  height: 1.6rem;
+  padding: 0;
+  font: 600 0.6rem var(--mono);
+  text-align: center;
+  color: var(--muted);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+
+.grid td[data-weight="full"] {
+  color: var(--felt-ink);
+  background: var(--felt);
+  border-color: var(--felt);
+}
+
+.grid td[data-weight="partial"] {
+  color: var(--ink);
+  border-color: var(--felt);
+  background: repeating-linear-gradient(135deg, var(--felt-soft) 0 3px, var(--paper) 3px 6px);
+}
+
+@media (min-width: 640px) {
+  .grid td {
+    height: 2.1rem;
+  }
+}
+
+.mixed {
+  margin: 0.5rem 0 0;
+  font: 0.85rem var(--mono);
+  color: var(--muted);
+}
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

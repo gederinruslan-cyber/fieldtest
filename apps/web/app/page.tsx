@@ -12,6 +12,10 @@ export default function Home() {
         <Link href="/tools/range-analyzer">Range analyzer</Link>: break a range down on any board.
       </p>
       <p>
+        <Link href="/tools/push-fold">Push/fold Nash calculator</Link>: which hands the small blind
+        pushes and the big blind calls, with ICM.
+      </p>
+      <p>
         <Link href="/tools/icm">ICM calculator</Link>: what each stack is worth in prize money.
       </p>
       <p>

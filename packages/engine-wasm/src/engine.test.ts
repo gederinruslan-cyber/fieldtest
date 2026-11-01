@@ -114,6 +114,17 @@ const ICM: [string, string][] = [
   ["1 2 3", "4 -1"],
 ];
 
+/** Push/fold spots: HRC reference stacks, ante, ICM with a folded player, refused input. */
+const PUSH_FOLD: [string, string, string][] = [
+  ["1000 1000", "50 100 0", "1"],
+  ["1500 1500", "50 100 10", "1"],
+  ["2000 2000 300", "50, 100, 0", "50, 30, 20"],
+  ["1000 1000", "0 100 0", "1"],
+  ["1000 100", "50 100 0", "1"],
+  ["1000 1000", "50 100", "1"],
+  ["1000 1000", "50 100 0", ""],
+];
+
 const CALLS: EngineCall[] = [
   { fn: "analysisLabels", args: [] },
   ...RANGES.flatMap((r): EngineCall[] => [
@@ -132,10 +143,11 @@ const CALLS: EngineCall[] = [
   ]),
   ...EQUITY.map((args): EngineCall => ({ fn: "equity", args })),
   ...ICM.map((args): EngineCall => ({ fn: "icm", args })),
+  ...PUSH_FOLD.map((args): EngineCall => ({ fn: "pushFold", args })),
 ];
 
 const NUMBERS = new Set(["rangeSize", "evaluateHand"]);
-const LISTS = new Set(["analyzeRange", "gridWeights", "equity", "icm"]);
+const LISTS = new Set(["analyzeRange", "gridWeights", "equity", "icm", "pushFold"]);
 
 /** Reads a native `ok<TAB>value` / `err<TAB>code` line as the result WASM gives. */
 function nativeResult(fn: string, line: string): EngineResult<unknown> {

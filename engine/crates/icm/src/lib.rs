@@ -3,13 +3,20 @@
 //! Malmuth-Harville ICM: each remaining player takes the next place with probability equal to
 //! their share of the chips still in play. Exact up to `f64` rounding.
 
+mod pushfold;
+
+pub use pushfold::{BOARDS, Matchups, PushFold, TARGET, class_index, matchups, push_fold};
+
 /// Error codes for input the ICM functions refuse.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Error {
-    /// Fewer than 2 or more than `MAX_PLAYERS` players, or a stack of 0 chips.
+    /// Fewer than 2 or more than `MAX_PLAYERS` players, a stack of 0 chips, or (push/fold) a
+    /// stack with nothing behind its blind and ante.
     InvalidStacks,
     /// No payouts, more payouts than players, or a negative or non-finite payout.
     InvalidPayouts,
+    /// A small blind of 0 or one not below the big blind.
+    InvalidBlinds,
 }
 
 /// Exact ICM keeps one value per set of players, so 2^20 of them at most.

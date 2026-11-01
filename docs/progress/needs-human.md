@@ -13,6 +13,36 @@
 - **Decision:** _(human)_
 -->
 
+## NH-5 · Heads-up push/fold fixture disagrees with exact Nash · blocking (F1-03) · Status: resolved
+- **Raised:** 2026-10-31 during F1-03 (build)
+- **Needed:** decide what `hu-push-fold.csv` checks, or replace it.
+- **Why:** golden fixture
+- **Evidence:**
+  - The solver plays exact heads-up equities from a full enumeration of the 169×169 classes.
+    The table matches `exact` on sampled class pairs and is consistent both ways.
+  - It converges to ε 1e-7 of the prize pool. At 12–20 bb it lands within 0.3–2.4 pp of the
+    published push/call percentages; at 2–8 bb it is up to 8 pp off (4 bb, no ante: 73.8 / 74.1
+    against 78.3 / 82.2).
+  - The published ranges are not an equilibrium of the stated game (stack before posting,
+    ante 10% of the BB, chip EV, which equals ICM heads-up). Against the published 4 bb push
+    range, the big blind's best response calls 75.3%, not 82.2%.
+  - At 2 bb the table pushes 63o. 63o has 35.47% ± 0.03% equity against the published 96.4%
+    calling range (core engine, Monte Carlo with 2M samples, independent of the new table).
+    Pushing is worth 1.476 bb against 1.500 bb for folding, a losing push.
+- **Options:**
+  - A: keep the fixture only for 12–20 bb at ±3 pp, labelled as a different model at short
+    stacks.
+  - B: retire `hu-push-fold.csv` as a pass/fail reference. Pin instead an independent
+    best-response check per spot (core-engine equity for the marginal hands) and solver outputs
+    the human approves.
+  - C: the human captures fresh heads-up spots from HRC (its free tool is CAPTCHA-protected)
+    with stated conventions.
+- **Recommendation:** A now, plus the independent marginal-hand check from B. C stays welcome
+  later.
+- **Decision:** 2026-10-31: the human chose A. `hu-push-fold.csv` is checked at 12–20 bb within
+  ±3 pp; 2–8 bb rows stay in the file as published but are not pass/fail. Plus the independent
+  core-engine check of the big blind's pure decisions.
+
 ## NH-4 · npm licenses outside ADR 0003 · blocking · Status: resolved
 - **Raised:** 2026-10-28 during F0-01 (build)
 - **Needed:** `pnpm licenses:check` refused tslib (0BSD, via bullmq and Next's @swc/helpers)

@@ -1,6 +1,7 @@
 # Heads-up push/fold Nash ranges (chip EV), percent of hands, small blind push and big blind call.
 # Source: https://www.pokerstrategy.com/strategy/sit-and-go/1779/ (updated 2026-03-11, computed with HoldemResources), retrieved 2026-10-28.
-# Approved: NH-2 §4, 2026-10-28. Tolerance: ±1 hand class (calculators differ by about 0.5%).
+# Approved: NH-2 §4, 2026-10-28. Tolerance: ±3 pp at 12–20 bb; 2–8 bb rows are not pass/fail, they are not an
+# equilibrium of the stated game (NH-5, 2026-10-31).
 stack_bb,ante_pct,sb_push_pct,bb_call_pct
 2,0,94.6,96.4
 2,10,98.2,100.0

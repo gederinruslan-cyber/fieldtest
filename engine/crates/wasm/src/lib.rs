@@ -1,7 +1,7 @@
 //! Browser bindings for the engine: thin wrappers, no math. Every function returns a `Result`
 //! whose error is a code (`InvalidToken`, `InvalidWeight`, `InvalidCard`, `InvalidHand`,
 //! `InvalidBoard`, `InvalidPlayers`, `NoValidDeal`, `InvalidSamples`, `InvalidStacks`,
-//! `InvalidPayouts`);
+//! `InvalidPayouts`, `InvalidBlinds`);
 //! none panics across the boundary.
 
 use fieldtest_core::{
@@ -181,5 +181,24 @@ pub fn icm(stacks: &str, payouts: &str) -> Result<Vec<f64>, String> {
         .iter()
         .zip(&stacks)
         .flat_map(|(&e, &s)| [e, if pool > 0.0 { e / pool } else { 0.0 }, s as f64 / chips])
+        .collect())
+}
+
+/// Push/fold Nash, small blind against big blind; any further stacks have folded after the
+/// ante. `blinds` is small blind, big blind and ante. Gives the exploitability, the push and
+/// call shares of all combos, then 169 push and 169 call weights in grid order.
+#[wasm_bindgen(js_name = pushFold)]
+pub fn push_fold(stacks: &str, blinds: &str, payouts: &str) -> Result<Vec<f64>, String> {
+    let stacks: Vec<u64> = numbers(stacks).ok_or("InvalidStacks")?;
+    let payouts: Vec<f64> = numbers(payouts).ok_or("InvalidPayouts")?;
+    let [small, big, ante] = numbers::<u64>(blinds)
+        .and_then(|b| <[u64; 3]>::try_from(b).ok())
+        .ok_or("InvalidBlinds")?;
+    let got = fieldtest_icm::push_fold(&stacks, small, big, ante, &payouts)
+        .map_err(|e| format!("{e:?}"))?;
+    Ok([got.exploitability, got.push_share, got.call_share]
+        .into_iter()
+        .chain(got.push)
+        .chain(got.call)
         .collect())
 }
