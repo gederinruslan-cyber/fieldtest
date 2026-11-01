@@ -2,6 +2,7 @@
 
 *One line per meaningful event, newest first.*
 
+- 2026-11-01 · F1-03 `push-fold-nash` merged (f335486); local verify:quick.
 - 2026-10-31 · F1-02 `icm-calculator` merged (52b95a2); local verify:quick.
 - 2026-10-31 · F1-01 `equity-calculator` merged (64feb2b); local verify:quick.
 - 2026-10-31 · M0 closed by the human (verifier VERIFIED 2026-10-28); M1 open.
